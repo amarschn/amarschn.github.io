@@ -50,7 +50,9 @@
 
 
 	<p>
-	-------------------------------------------------------------------------------------
+
+	----------------------------------------------------------------------------------------------------------------------------------------
+
 	</p>
 	<p>
 	01/02/14 Day 2: Box2D fun
@@ -58,6 +60,20 @@
 
 	<p>
 	Today was not extremely productive unfortunately, I had planned to get Box2D going in the game, but I ran into some issues drawing the rectangle sprites for each rectangle of the user ship onto the screen so that they match the Box2D representation of the ship. For those that do not know, Box2D is an open source 2D physics engine that many games use, and, at least in my case, using Box2D means having 2 representations of any kind of object in the game, one being what the player will see (sprites), and the Box2D representation of that object, which is invisible, but which will be used to determine position, velocity, and rotation of the visible sprite. This can lead to some confusion, particularly in my case with large shapes made up of many smaller shapes. I will update this more later.
+	</p>
+	<p>
+
+	-----------------------------------------------------------------------------------------------------------------------------------------
+
+	</p>
+	<p>
+	01/03/14 Day 3: Box2D not so fun
+	</p>
+	I was able to get Box2D running today, so that you can make some kind of "ship" with the construction screen, and that ship will be rendered in on screen with each square of the ship set as an individual fixture part of the body of the ship. I have run into a problem however, trying to put individual sprites on each fixture of a body. The typical Box2D way seems to be mapping a single sprite to a single body. In my case, since a single ship is made up of many different blocks, I want to have a sprite for each of those blocks rather than have to create a new sprite every time the ship takes damage or otherwise changes in appearance. Not sure what to do about this one right now. I hacked a way to get the sprites attached to each fixture by making a hashmap that uses fixtures as keys and each fixture's location with respect to the body they are a part of as the value, but it doesn't feel like a clean solution. Also currently having issues with rotation, as they cause the below effects:
+
+
+	In other news, I have selected Pelican, a Python-based static web generator, to make this blog a little fancier. Wooooo!
+	<p>
 	</p>
 </body>
 </html>
