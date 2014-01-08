@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>A Pelican Blog</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+        <link href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title="A Pelican Blog Atom Feed" />
+
+        <!--[if IE]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">A Pelican Blog </a></h1>
+                <nav><ul>
+                    <li><a href="/category/starblock.html">StarBlock</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+
+            <aside id="featured" class="body">
+                <article>
+                    <h1 class="entry-title"><a href="/star-block.html">StarBlock Blog</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2014-05-01T00:00:00">
+                Thu 01 May 2014
+        </abbr>
+
+        <address class="vcard author">
+                By <a class="url fn" href="/author/drew.html">Drew</a>
+        </address>
+<p>In <a href="/category/starblock.html">StarBlock</a>. </p>
+<p>tags: <a href="/tag/libgdx.html">libgdx</a></p>
+</footer><!-- /.post-info --><h2>01/01/2014 Day 1: Hello World!</h2>
+<p>Hello, my name is Drew, and I am developing a game, tentatively named Star Block.</p>
+<p>Star Block will be a 2D space-shooter/spaceship-building game. Kind of like a mix between Asteroids and a 2D version of Minecraft. </p>
+<p>The main purpose of this blog will be to act as a development journal, something that will help motivate me when the game inevitably loses it's new project luster, and allow me to look back at my thought processes during development. I also have never set up a blog or website before, so I thought this would be a way to learn about web development. As of right now I am using Github Pages and have not yet gotten a domain name.</p>
+<p>A bit about the game so far:</p>
+<p>I am using the multi-platform, open source framework <a href="http://libgdx.badlogicgames.com/">LibGDX</a> which I chose largely due to it's large user base, active development, use of Java (I like Java), and because I was tired of constantly jumping from framework to framework wondering which the "best" was.</p>
+<p>The game is focused around the idea of making 2D spaceships out of different types of squares, and using that ship to battle enemy spaceships. Right now the types of squares with which the player can build their ship are:</p>
+<div class="highlight"><pre><span class="mf">1.</span> <span class="n">Command</span> <span class="n">Squares</span><span class="o">:</span> <span class="n">the</span> <span class="n">heart</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ship</span><span class="p">,</span> <span class="n">lose</span> <span class="n">this</span> <span class="n">and</span> <span class="n">your</span> <span class="n">ship</span> <span class="n">is</span> <span class="n">toast</span>
+<span class="mf">2.</span> <span class="n">Energy</span> <span class="n">Squares</span><span class="o">:</span> <span class="n">these</span> <span class="n">squares</span> <span class="n">power</span> <span class="n">the</span> <span class="n">engines</span> <span class="n">and</span> <span class="n">weapons</span> <span class="n">of</span> <span class="n">the</span> <span class="n">ship</span>
+<span class="mf">3.</span> <span class="n">Engine</span> <span class="n">Squares</span><span class="o">:</span> <span class="n">allow</span> <span class="n">the</span> <span class="n">ship</span> <span class="n">to</span> <span class="n">move</span>
+<span class="mf">4.</span> <span class="n">Weapon</span> <span class="n">Squares</span><span class="o">:</span> <span class="n">cannons</span><span class="p">,</span> <span class="n">missiles</span><span class="p">,</span> <span class="n">lasers</span>
+<span class="mf">5.</span> <span class="n">Storage</span> <span class="n">Squares</span><span class="o">:</span> <span class="n">store</span> <span class="n">ammunition</span> <span class="n">and</span> <span class="n">fuel</span>
+</pre></div>
+
+
+<p>What I like about this mechanic is that it forces the player to consider the design of their ship with their playing style, and immediately offers a kind of balance between size, speed, manueverability, durability, and firepower. Another cool aspect of this is that the functionality of your ship will change as you fight, for instance when an energy square on your ship is destroyed, all of the weapons and engines that energy square may have powered will become dead weight.</p>
+<p>I plan on posting once a day about my development progress. I have set myself a 60 day goal of having a completed PC game. In my case completed means the following:</p>
+<div class="highlight"><pre><span class="o">-</span><span class="n">Ship</span> <span class="n">construction</span> <span class="n">and</span> <span class="n">modification</span>
+<span class="o">-</span><span class="n">Movement</span> <span class="n">and</span> <span class="n">combat</span> <span class="n">using</span> <span class="n">the</span> <span class="n">previously</span> <span class="n">mentioned</span> <span class="s">&quot;powered squares&quot;</span> <span class="n">game</span> <span class="n">mechanics</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+<span class="o">-</span><span class="n">At</span> <span class="n">least</span> <span class="mi">1</span> <span class="n">playable</span> <span class="n">mission</span>
+<span class="o">-</span><span class="n">PC</span> <span class="n">only</span>
+</pre></div>
+
+
+<p>These are admittedly pretty modest goals, but I have never developed a full game before and I don't think it is a good idea to set unattainable milestones. With that being said, I do plan on making this game cross platform, with the next target (after PC) being Android. For now though, I will focus on the PC as my sole platform.</p>
+<h2>01/02/14 Day 2: Box2D fun</h2>
+<p>Today was not extremely productive unfortunately, I had planned to get Box2D going in the game, but I ran into some issues drawing the rectangle sprites for each rectangle of the user ship onto the screen so that they match the Box2D representation of the ship. For those that do not know, Box2D is an open source 2D physics engine that many games use, and, at least in my case, using Box2D means having 2 representations of any kind of object in the game, one being what the player will see (sprites), and the Box2D representation of that object, which is invisible, but which will be used to determine position, velocity, and rotation of the visible sprite. This can lead to some confusion, particularly in my case with large shapes made up of many smaller shapes. I will update this more later.</p>
+<h2>01/03/14 Day 3: Box2D not so fun</h2>
+<p>I was able to get Box2D running today, so that you can make some kind of "ship" with the construction screen, and that ship will be rendered in on screen with each square of the ship set as an individual fixture part of the body of the ship. I have run into a problem however, trying to put individual sprites on each fixture of a body. The typical Box2D way seems to be mapping a single sprite to a single body. In my case, since a single ship is made up of many different blocks, I want to have a sprite for each of those blocks rather than have to create a new sprite every time the ship takes damage or otherwise changes in appearance. Not sure what to do about this one right now. I hacked a way to get the sprites attached to each fixture by making a hashmap that uses fixtures as keys and each fixture's location with respect to the body they are a part of as the value, but it doesn't feel like a clean solution. Also currently having issues with rotation, as they cause the below effects:</p>
+<p>In other news, I have selected Pelican, a Python-based static web generator, to make this blog a little fancier. Wooooo!</p>
+<h2>01/04/14 Day 4: FAILUREEEEEEEEEEEEEEEEEE</h2>
+<p>Today was not so good. I fumbled with Box2D for an embarrassing amount of time and still am not able to get Sprites to attach correctly to fixtures within the spaceship. This is pretty frustrating, as it really is a very simple thing I am trying to do. I know there is a way, but getting there is taking a lot longer than expected. Box2D is a "pure" physics engine, meaning that it only deals in meters, Newtons, seconds, and other real-world units. When using Box2D, you create a simulated world and watch as bodies within that world interact. What this means for a game trying to use Box2D is that the game is always trying to match up what can be seen by the player with the invisible physics simulation going on in the Box2D world. I will try again tomorrow I suppose. It has been a frustrating day. </p>
+<h2>01/05/14 Day 5: SUCCESSSSSSSSSSSSSSSSSSS</h2>                </article>
+            </aside><!-- /#featured -->
+            </ol><!-- /#posts-list -->
+            </section><!-- /#content -->
+        <section id="extras" class="body">
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+                            <li><a href="/feeds/all.atom.xml" type="application/atom+xml" rel="alternate">atom feed</a></li>
+
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
