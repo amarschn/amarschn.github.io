@@ -69,3 +69,188 @@ Next step is to work on the making different squares of the ship act differently
 01/07/14 Day 7: Movement
 ---------------------------------------
 TOday I messed with the control scheme some, but it is still not perfect. Also need to implement some kind of "ship complete" function that will not allow a player to create a ship with disconnected parts. 
+
+01/08/14 Day 8: 
+---------------
+Didn't feel too great, and had some other business to take care of.
+
+01/09/14 Day 9:
+---------------
+School apps, no progress.
+
+01/10/14 Day 10: I opened Eclipse today! Gold star!
+---------------------------------------------------
+Well, my 60-day deadline 1/6 over already. Do I feel like I am on track? Not a chance. There is still so much to do. Today I worked some and was able to implement movement applied to individual squares in your ship, but it is not yet incorporated into the ship so that the energy squares are the points of force application. Overall, I am dissapointed with my current progress, and my blog posts obviously reflect that, as they are all short with little to report. I'm not going to stop though, and this weekend I plan on getting a lot done, hopefully I won't waste a ton of hours messing with Box2D this time around.
+
+Since this is day 10, I am going to arbitrarily have an overview of what I still have planned, in no particular order, here goes:
+1. Implement fully functioning ship, with keyboard + mouse control scheme
+2. Implement enemy ships, with some kind of AI/pathing/fighting capabilities
+3. Create destructible asteroids
+4. Make a not-terrible splash screen and mission selection screen
+5. Create artwork for game (more block types, and maybe a logo)
+
+So that is a very broad view of things I have to do, each of them is going to take some time and subdivision into smaller tasks. Right now my focus is just on getting the user the capability to build a ship and then fly it around. After that I will probably try to create some enemy types to play with and verify basic game playability.
+
+01/11/14 Day 11: Some progress
+------------------------------
+Today I was able to get the player's ship to start moving more like how I envisioned it. I am not sure if I have fully illuminated how I want my ship to move, so I'll give some more detail now. Alright, first imagine the ship as a some cluster of squares, each square of some kind of type, this case lets just assume the only available types are:
+
+- A square that powers the squares to its top, bottom, left, and right
+- A square that exerts a force on the square that powers it, in only one direction
+
+Using a combination of of these two kinds of squares, we can make a very basic ship, as shown in the below screenshot:
+
+(SHOW SCREENSHOT)
+
+In this ship, the yellow (it is a faded yellow so it is kind of hard to make out, but it is the center square) is the first kind of square. It powers the squares adjacent to it (the green and gray squares), and is the one square in which force is applied. 
+
+The other four squares are all of the second type, that which are powered by the center square and so can exert force on it. The green and gray squares both refer to the second type of square mentioned, with green representing squares that are currently exerting force, and gray being squares that are not exerting force. The other thing to consider is this second type of square, the one that exerts force on the middle square, can only exert force in one direction, that direction being towards the powering square. So, with this sample ship, the square at the top can push down on the center square, thus pushing the whole ship downward, the square at the right can push leftwards on the center square, thus pushing the entire ship leftward, and so on. With this simple ship, we have all 4 directions of the compass covered, and the ship can move any which way it wants.
+
+Now let's get a little more complicated.
+
+What if there are more than one of the first type of square, the type that powers the ship? And different numbers of the second type of square stacked up on top of each other? What happens? What if it looks like this:
+
+(SHOW SCREENSHOT)
+
+Well, what happens is it gets tough to control. You have these multiple points of force acting on the ship, and what typically occurs is you spin out of control and have no idea what is going on. Not too fun. So, to counteract this, we need some smarts build into the ship so that all you need to do is click somewhere, setting a target location, and your ship will decide which powering squares to use to get you there. I have not yet implemented that, because I am not quite sure how I want to do it yet. I should be able to make some headway on that tomorrow however.
+
+As always, even though I feel like I got some good stuff done today, it is never enough. Still so much to do. Just gotta keep going.
+
+01/12/14 Day 12: Vector Math
+---------------------
+Today was not so productive, as I spent a while re-learning how to use vectors to get the right target the ship. Currently, what the targeting algorithm does is the following for each individual energy square in your ship:
+
+(MAKE PICTURES)
+
+
+1) Get the target location in absolute world coordinates, and subtract from the energy square's center location, thus making a difference vector
+2) Using the current angle of the energy square, convert the difference vector into a vector oriented about the energy square's local coordinate system
+3) Give the newly oriented difference vector to the engines, and get thrust in the desired dimensions, depending on what engines directions are available for that energy square
+
+Simple enough right? Except it hasn't been unfortunately. There are some problems which I am not yet sure how to solve. One is a LibGDX issue, in that the absolute coordinate system will resize itself to the zoom level. Meaning that the top left corner of the screen is set as (0, 0) regardless of zoom. This causes problems in that it creates a mis-match between actual world coordinates and perceived world coordinates.
+
+Another issue, which is more basic and might make me have to scrap the movement stuff I currently have, is that the ship with multiple energy squares with various engine dispositions still spins like crazy when it tries to fly a target location, because different energy squares provide different levels of thrust and it seems to immediately get out of whack. Not good. So I need some way for the ship to stabilize itself and still head in the right direction.
+
+01/13/14 Day 13: Down the rabbit hole
+------------------------------
+The issue of control has not been resolved. Not a lot of code written, but a good amount of head scratching over my notes, with lots of poorly drawn cartesian coordinate systems. My thoughts are still somewhat jumbled on this, but I'll see if I can explain the problems a little more thoroughly. 
+
+So, we have a rigid body, the ship. The ship is made up of equally sized blocks, all square and all set at the same angle. Each block's density is (for now) the same as all the other blocks. However, the blocks can form irregular shapes, since you can connect them however you want. It has multiple points where forces can be exerted, or in other words, control points (in other other words, these are the energy squares I have been talking about). The way forces are exerted on the blocks is through 2D vectors, with an X and Y component. The available X and Y components of the force that can be exerted on each energy block is variable (dependent on the number of engine blocks).
+
+What we end up having is an irregularly shaped rigid body, with multiple points of control with varying force. And we want to move this body to a target location efficiently using the available points of control, without rotation. In other words, imagine having 4-5 legs, all of varying lengths and on various locations on your body, and having to walk in a smooth manner. It would probably be tough. Add on to this the fact that these same energy squares will eventually be used for powering weapons as well, meaning an energy square could be powering an engine at one time and then a weapon at another, and you get a recipe for complexity.
+
+So after typing all that, let's get to my current ideas on how to solve this issue, and the problems my solutions then raise. 
+
+My first thought was that instead of dealing with each energy square every time we want to make a movement calculation, we could just sum all of the energy square X and Y potential forces into one overall potential force vector for the whole ship, centered on the center of mass of the ship (conveniently provided by Box2D's getWorldCenter() method), and then go from there. This could work, and would neatly eliminate any issues with rotation, because you would always be exerting a force on the center of mass. However, what I don't like about this is that it isn't a realistic simulation of the physics of a mult-engine ship, because it doesn't take into account any of the torque caused by different energy squares being variable distances from the center of mass. I'll call this the Single Force Vector solution. Pretty simple to implement, but not realistic. I'll leave it as a last resort.
+
+(DRAW PICTURE OF ONE FORCE VECTOR SOLUTION)
+
+My next idea was a little more complicated, but took torque into account:
+- Get a target location, and convert that target location into a unit square vector relative to the ship's coordinate system [Link: http://www.wildbunny.co.uk/blog/vector-maths-a-primer-for-games-programmers/rotation/], this unit square vector is the (X,Y) direction that each energy square will fire it's engines
+- For each energy square, in the X dimension, calculate the moment arm formula (Torque = moment arm length * force), where the moment arm length is distance from center of energy square to center of mass of the ship in the given X or Y dimension, and force is the available thrust for the given energy square in the X dimension, to calculate the torque that energy square will provide
+- Repeat this process, only in the Y dimension
+- Sum all of the torques
+- You now have the total torque that would be exerted on the ship if all of the energy squares fired at the same target vector
+- To avoid rotation, what would then be needed is some kind of torque matching, where we get the maximum amount of force we could from each energy square, but at the same time make sure to balance the negative torque and positive torque exactly, thus keeping the ship from rotating
+
+(DRAW PICTURE OF CONSTANT TORQUE SOLUTION)
+
+I call this the Equal Torque solution. I have not yet implemented this idea, but I am worried about the potential performance penalties (I know I know, premature optimization = evil and all that, but still, that is a lot of calculation), as well as whether this will actually result in consistent and controllable motion. I will try it out tomorrow and see what happens, but I have a feeling that this is going to be a difficult thing to get satisfied with, because really it is at the core of the gameplay mechanic of geometry-specific ship performance, where the shape of your ship design changes the way that ship flies and fights. That is the hook of the game in my mind, so I need the effects of ship design changes to really show through its movement behavior.
+
+01/14/14 Day 14: N/A
+--------------------
+Didn't have time to do anything today. :(
+
+01/15/14 Day 15: Blah
+----------------
+Today was worthless. I mostly just stared at the screen. Not sure how I am going to do this motion control thing. If I don't figure it out by this weekend, I am just going to implement a simple method, perhaps the first one I mentioned on Day 13, and just move on to the next thing. Still a ton to do, and I am already 1/4th the way through the 60 days. Ah.
+
+01/16/14 Day 16: Double Blah
+-----------------------------
+I didn't really do anything today, spent most of the evening with friends.
+
+01/17/14 Day 17: AHHHHHHHHHHHHH
+-------------------------------
+WHY CAN'T I FIGURE THIS CRAP OUT.
+
+01/18/14 Day 18
+---------------
+There were a few issues with basic ship movement, so I fixed those. But still no fix for complex ship geometries.
+
+01/19/14 Day 19
+---------------
+Today I took a break, and also began work on my C/C++ class homework assignment
+
+01/20/14 Day 20
+---------------
+One third of the way through, things are getting kind of backed up with work and my C/C++ class, we'll see how productive I can be this week.
+
+01/21/14 Day 21
+---------------
+Work and C/C++ assignment = no work done today.
+
+01/22/14 Day 22
+---------------
+goto Day 21
+
+01/23/14 Day 23
+---------------
+Today I at least had the time and energy to look at my code. Really, basic steering behaviors for simple shapes are still not working well. Right now steering can still be thrown off very easily by changes in angle, causing all sorts of errors.
+
+01/24/14 Day 24
+---------------
+Got some sketches done to upload to this blog, that way I can better explain what I am saying. Will update some of the older posts. Otherwise, looking at trying to get a better way to apply forces to individual squares accurately, as currently there is a slight difference between what is calculated as the center of an energy square vs. where that center is in the box2D world, which means that when I apply a force at the calculated "center", there is a slight torque on the square and this can result in unwanted rotation.
+
+01/25/14 Day 25
+---------------
+Still tweaking the navigation algorithm, but making progress. There seems to be some sort of oscillation problem when the ship is rotating where it won't maintain X,Y position, but only if it is spinning. I think this has something to do with converting coordinates from world coordinates to ship coordinates and back, but haven't been able to narrow down the root cause yet.
+
+01/26/14 Day 26
+---------------
+Work/Class
+
+01/27/14 Day 27
+---------------
+
+01/28/14 Day 28
+---------------
+
+01/29/14 Day 29
+---------------
+
+01/30/14 Day 30
+---------------
+Some progress at last! Basic navigation finally works when the ship rotates, but only if it is a uniform shape. Work will begin on non-uniform shapes this weekend.
+
+01/31/14 Day 31
+---------------
+
+02/01/14 Day 32
+---------------
+Have a semi-working implementation of a rotation-based navigation algorithm, but it does not work with non-symmetric ship shapes, and often ends up in the ship spinning about wildly and off-target. I may have to something else.
+
+02/02/14 Day 33
+---------------
+
+02/03/14 Day 34
+---------------
+
+02/04/14 Day 35
+---------------
+Lot of frustration today. I feel like I might need to rethink what I have been trying to do with the whole concept.
+
+02/05/14 Day 36
+---------------
+I have decided to implement a simpler process for moving a ship, and am dropping the build your own ship features for now. It is disappointing, but my number one goal with this project was getting a "complete" game out the door, and as things stand right now I don't think I can do that if I focus on making every aspect of the game perfect. Moving forward, I will start with a simple ship design for the user and enemies, mouse control, and asteroids. I will still use Box2D and leverage some existing code. I may return to the ship-building game mechanic at some point, but first things first, I need to get a fully working game.
+
+02/06/14 Day 37
+---------------
+Wow, I just found a game that has many aspects of the whole ship creation thing, and does them pretty well:
+
+[Captain Forever](http://www.captainforever.com/)
+
+I played this game for a bit, and I found it very fun, and it makes the ship-building aspect of playing very fun, while also intense, and it involves some thinking. The one part of my idea that is different is the idea of engine and weapon power being determined by size. In the Captain Forever game, new weapons and engines are picked up from enemies, but the relative power of any given weapon or engine is static.
+
+All-in-all, it is a pretty bittersweet thing to see a game with so many of "my" ideas in it, so well executed. On the one hand, it is very cool to see the concept realized. But it is hard not being the one who created it. It is very rare to be the first one to an idea, and I knew that going into this project. However, the timing of this discovery is pretty funny, right when I decide I need to shift away from the ship-construction concept and instead focus on finishing a game, I come across a game with all the game mechanics I wanted. Oh well. I am going to push forward with a simpler "Asteroids"-style game, and worry about doing more later on.
+
+The key to actually finishing this game will be forcing myself to move forward. Common advice I have found on other forums is to get something in a "good enough" state, and then leave it until you need to come back and polish it more. I was trying that earlier, but I got very much side-tracked. Simplicity is key, and by eliminating the need for a pretty complex control loop just to move from point A to point B on the screen, I'll be able to make a lot more headway.
