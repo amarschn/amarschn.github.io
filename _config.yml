@@ -1,0 +1,8 @@
+# Site settings
+email: andrew.marschner@gmail.com
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://amarschn.github.io" # the base hostname & protocol for your site
+github_username:  amarschn
+
+# Build settings
+markdown: kramdown
