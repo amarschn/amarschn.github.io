@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Resume
-weight: 0
+weight: 2
 ---
 
 Hello
