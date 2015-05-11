@@ -5,7 +5,7 @@ summary:
 status: draft
 hn-discussion:
 tags:
-- mrsd_project
+- misc
 ---
 
 Test test test
