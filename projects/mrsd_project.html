@@ -5,11 +5,32 @@ permalink: /projects/mrsd_project/
 
 
 <div class="home">
-  <h1 class="page-heading">MRSD Project</h1>
-
+  <h1>MRSD Project</h1>
+  <h2>Overview</h2>
+  <p>
+  This was a year-long team project I worked on with 3 other members during my first year at CMU. The project premise was an easily re-configurable, modular robotic system. I learned a lot from this project, as it was the first time I built a complex robot. Overall I think the project was a great learning success, although the system was not as reliable as I would have liked. Below are the updates I wrote up for the 2 semesters.
+  </p>
+  <p>
+  <a href="https://sites.google.com/site/mrsdproject201415teamd/">Project Website</a>
+  </p>
+  <p>
+  <a href="/assets/mrsd_project_assets/FinalReport.pdf">Final Report</a>
+  </p>
+  <p>
+  <a href="/assets/mrsd_project_assets/TDP.pdf">Technology Development Plan</a>
+  </p>
+  <p>
+  <a href="/assets/mrsd_project_assets/poster.pdf">Poster</a>
+  </p>
+  <h2>Posts</h2>
   <ul class="post-list">
     {% for post in site.tags["mrsd_project"] %}
-            <li>{{ post.title }}</li>
+        <li>
+        	<span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+            <div class="divider"/>
+            <a class="link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+
+      </li>
     {% endfor %}
   </ul>
 </div>
