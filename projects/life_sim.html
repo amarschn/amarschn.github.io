@@ -1,0 +1,22 @@
+---
+layout: default
+permalink: /projects/life_sim/
+weight: 1
+---
+
+<div class="home">
+  <h1>Ecosystem Simulation</h1>
+  <h2>Overview</h2>
+  <p>A simulator for a simple evolving ecosystem.</p>
+  <h2>Posts</h2>
+  <ul class="post-list">
+    {% for post in site.tags["life_sim"] %}
+        <li>
+        <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+            <div class="divider"/>
+            <a class="link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+
+      </li>
+    {% endfor %}
+  </ul>
+</div>
