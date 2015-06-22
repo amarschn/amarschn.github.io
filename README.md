@@ -9,8 +9,8 @@ To test on http://localhost:4000/:
 To create a new post:
 
 	sudo python jekyll-post.py [-w] [-d date] [title]
-	
-	Example : sudo python jekyll-post.py -d "2015-06-15" "misc" "Test Post"
+
+	Example : sudo python jekyll-post.py -d "2015-06-15" -t "misc" "Test Post"
 
 To create a new project:
 
