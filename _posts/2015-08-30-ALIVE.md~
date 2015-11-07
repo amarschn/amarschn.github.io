@@ -1,0 +1,25 @@
+---
+layout: post
+title: ALIVE
+summary:
+status: draft
+hn-discussion:
+tags:
+- life_sim
+---
+
+IT'S ALIVE!!!!!!
+
+A lot has happened since my last post, but finally I got the ecosystem to run correctly. There were many small errors to fix and I had to sacrifice on some of my initial desires of how creatures would work. Here is a screencap of a 100 x 100 ecosystem on around the 14,000th run-through of the grid:
+
+![14,000th Iteration](/assets/life_sim_assets/v1_14000.png)
+
+As you can see, it is primarily green with some darker areas and some brown as well. The colors correspond to the following:
+
+- Red - FEAR : how much the creature wants to stay alive
+- Green - GREED : how much the creature wants energy
+- Blue - SOCIAL : how much the creature wants to be near similar creatures
+
+As time went on, it became clear that greed dominated, as the field became greener and greener:
+
+![120,000th Iteration](/assets/life_sim_assets/v1_120000.png)
